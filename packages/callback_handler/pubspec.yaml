@@ -1,0 +1,12 @@
+name: callback_handler
+description: Callback handler package with implementations, interfaces, and types
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies: {}
+
+dev_dependencies:
+  test: ^1.24.0

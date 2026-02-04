@@ -1,0 +1,15 @@
+name: callback_handler_test
+description: Test utilities and test package for callback handler
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  callback_handler:
+    path: ../callback_handler
+    version: ^0.0.1
+
+dev_dependencies:
+  test: ^1.24.0
