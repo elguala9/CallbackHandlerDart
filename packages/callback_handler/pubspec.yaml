@@ -1,7 +1,16 @@
 name: callback_handler
-description: Callback handler package with implementations, interfaces, and types
+description: High-performance callback management with O(1) operations, type-safe generic support, and multiple callback registration for Dart applications.
 version: 0.0.1
-publish_to: none
+repository: https://github.com/yourusername/callback_handler
+homepage: https://github.com/yourusername/callback_handler
+issue_tracker: https://github.com/yourusername/callback_handler/issues
+
+topics:
+  - callback
+  - event
+  - handler
+  - observer
+  - performance
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
