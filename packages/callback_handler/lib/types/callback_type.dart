@@ -9,3 +9,11 @@
 /// CallbackWithReturn<String, int> callback = (input) => input.length;
 /// ```
 typedef CallbackWithReturn<I, R> = R Function(I);
+
+/// A function type for void callbacks with no return value.
+///
+/// Example:
+/// ```dart
+/// CallbackVoid callback = () { print('Called'); };
+/// ```
+typedef CallbackVoid = void Function(void);
