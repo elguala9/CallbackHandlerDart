@@ -1,6 +1,6 @@
 name: callback_handler
 description: High-performance callback management with O(1) operations, type-safe generic support, and multiple callback registration for Dart applications.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/elguala9/CallbackHandlerDart
 homepage: https://github.com/elguala9/CallbackHandlerDart
 issue_tracker: https://github.com/elguala9/CallbackHandlerDart/issues
