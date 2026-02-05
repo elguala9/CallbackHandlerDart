@@ -128,6 +128,7 @@ Main class for managing callbacks.
 - `void register(CallbackWithReturn<InputType, ReturnType> callback)` - Register a new callback
 - `void unregister(CallbackWithReturn<InputType, ReturnType> callback)` - Remove a registered callback
 - `void invoke(InputType input)` - Invoke all registered callbacks with the given input
+- `void clear()` - Remove all registered callbacks
 
 ### ICallbackHandler<InputType, ReturnType>
 
@@ -167,7 +168,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ### Issues
 
-If you encounter any issues, please file them on the [issue tracker](https://github.com/yourusername/callback_handler/issues).
+If you encounter any issues, please file them on the [issue tracker](https://github.com/elguala9/CallbackHandlerDart/issues).
 
 ### License
 

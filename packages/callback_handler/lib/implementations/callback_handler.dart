@@ -14,19 +14,28 @@ class CallbackHandler<CallbackInputType, CallbackReturnType>
             CallbackWithReturn<CallbackInputType, CallbackReturnType>>();
 
   /// Register a callback
+  @override
   void register(
       CallbackWithReturn<CallbackInputType, CallbackReturnType> callback) {
     map.set(callback.hashCode, callback);
   }
 
   /// Unregister a callback
+  @override
   void unregister(
       CallbackWithReturn<CallbackInputType, CallbackReturnType> callback) {
     map.delete(callback.hashCode);
   }
 
   /// Invoke a registered callback
+  @override
   void invoke(CallbackInputType input) {
     for (int i = 0; i < map.length; i++) map.getByIndex(i).call(input);
+  }
+
+  /// Clear all registered callbacks
+  @override
+  void clear() {
+    map.clear();
   }
 }

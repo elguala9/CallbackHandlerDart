@@ -3,7 +3,7 @@
 * Initial release
 * CallbackHandler implementation with generic type support
 * FastMap utility for O(1) operations
-* Register, unregister, and invoke functionality
+* Register, unregister, invoke, and clear functionality
 * ICallbackHandler interface
 * Full test coverage
 * Comprehensive documentation and examples

@@ -1,6 +1,6 @@
 name: callback_handler_test
 description: Test utilities and test package for callback handler
-version: 0.0.1
+version: 0.0.2
 publish_to: none
 
 environment:

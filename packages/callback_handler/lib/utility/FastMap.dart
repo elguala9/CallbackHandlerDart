@@ -39,4 +39,9 @@ class FastMap<K, V> {
 
   V getByIndex(int index) => _values[index];
   int get length => _values.length;
+
+  void clear() {
+    _values.clear();
+    _keyToIndex.clear();
+  }
 }

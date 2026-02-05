@@ -25,4 +25,7 @@ abstract interface class ICallbackHandler<CallbackInputType,
   ///
   /// All registered callbacks will receive the same [input] value.
   void invoke(CallbackInputType input);
+
+  /// Clear the object
+  void clear();
 }
