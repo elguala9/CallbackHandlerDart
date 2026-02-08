@@ -4,6 +4,7 @@ version: 0.0.2
 repository: https://github.com/elguala9/CallbackHandlerDart
 homepage: https://github.com/elguala9/CallbackHandlerDart
 issue_tracker: https://github.com/elguala9/CallbackHandlerDart/issues
+documentation: https://pub.dev/documentation/callback_handler/latest/
 
 topics:
   - callback
@@ -12,6 +13,14 @@ topics:
   - observer
   - performance
 
+platforms:
+  android:
+  ios:
+  linux:
+  macos:
+  web:
+  windows:
+
 environment:
   sdk: ">=3.0.0 <4.0.0"
 
@@ -19,3 +28,4 @@ dependencies: {}
 
 dev_dependencies:
   test: ^1.24.0
+  lints: ^5.1.0

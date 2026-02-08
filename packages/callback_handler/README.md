@@ -13,13 +13,26 @@ A high-performance Dart package for managing callbacks with type-safe generics a
 - **Clean Architecture**: Interface-based design for easy testing and extension
 - **Zero Dependencies**: Lightweight with no external dependencies
 
+## Platform Support
+
+callback_handler is a **pure Dart package** with zero native dependencies, making it compatible with all Dart platforms:
+
+| Platform | Support | Notes |
+|----------|---------|-------|
+| ✅ Android | Full | No platform-specific code |
+| ✅ iOS | Full | No platform-specific code |
+| ✅ Web | Full | Including WebAssembly |
+| ✅ Windows | Full | Pure Dart implementation |
+| ✅ macOS | Full | Pure Dart implementation |
+| ✅ Linux | Full | Pure Dart implementation |
+
 ## Installation
 
 Add this to your package's `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  callback_handler: ^0.0.1
+  callback_handler: ^0.0.2
 ```
 
 Then run:
@@ -159,6 +172,51 @@ Run tests:
 ```bash
 dart test
 ```
+
+## Troubleshooting
+
+### Callback not being invoked
+
+Ensure the callback is registered before calling `handler(input)`. Check that you're using the same callback instance for registration and invocation.
+
+### Same callback registered multiple times
+
+Callbacks are identified by their `hashCode`. Registering the same function instance multiple times has no effect. Different lambda instances are treated as separate callbacks.
+
+### Memory leaks
+
+Always call `unregister()` or `clear()` when callbacks are no longer needed to prevent memory leaks. Consider using weak references if automatic cleanup is required.
+
+### Type errors
+
+Ensure generic types match when registering callbacks:
+
+```dart
+// Correct
+final handler = CallbackHandler<String, int>();
+handler.register((String s) => s.length);
+
+// Wrong - will cause type error
+handler.register((int n) => n.toString());
+```
+
+## Migration Guide
+
+### Upgrading from 0.0.1 to 0.0.2
+
+The `invoke()` method is deprecated in favor of the callable syntax:
+
+```dart
+// ❌ Old (deprecated)
+final results = handler.invoke(input);
+
+// ✅ New (recommended)
+final results = handler(input);
+// or
+final results = handler.call(input);
+```
+
+Both syntaxes work identically, but `call()` provides cleaner, more idiomatic Dart code.
 
 ## Additional Information
 

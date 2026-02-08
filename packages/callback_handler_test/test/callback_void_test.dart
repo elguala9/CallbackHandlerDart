@@ -92,29 +92,39 @@ void main() {
     group('invoke', () {
       test('should invoke a single void callback', () {
         int callCount = 0;
-        handler.register((void input) {
+        void callback(void input) {
           callCount++;
-        });
+        }
+        handler.register(callback);
 
-        handler.invoke(null);
+        final returnValues = handler.invoke(null);
+
         expect(callCount, equals(1));
+        expect(returnValues, isA<Map<int, void>>());
+        expect(returnValues.length, equals(1));
       });
 
       test('should invoke multiple void callbacks', () {
         int callCount = 0;
 
-        handler.register((void input) {
+        void callback1(void input) {
           callCount++;
-        });
-        handler.register((void input) {
+        }
+        void callback2(void input) {
           callCount++;
-        });
-        handler.register((void input) {
+        }
+        void callback3(void input) {
           callCount++;
-        });
+        }
 
-        handler.invoke(null);
+        handler.register(callback1);
+        handler.register(callback2);
+        handler.register(callback3);
+
+        final returnValues = handler.invoke(null);
+
         expect(callCount, equals(3));
+        expect(returnValues.length, equals(3));
       });
 
       test('should not invoke unregistered void callbacks', () {
@@ -131,13 +141,50 @@ void main() {
         handler.register(callback2);
         handler.unregister(callback1);
 
-        handler.invoke(null);
+        final returnValues = handler.invoke(null);
 
         expect(callCount, equals(1));
+        expect(returnValues.length, equals(1));
       });
 
       test('should handle invoke with no callbacks registered', () {
         expect(() => handler.invoke(null), returnsNormally);
+        final returnValues = handler.invoke(null);
+        expect(returnValues, isEmpty);
+      });
+    });
+
+    group('call method', () {
+      test('should call as function with void callbacks', () {
+        int callCount = 0;
+        void callback(void input) {
+          callCount++;
+        }
+        handler.register(callback);
+
+        final returnValues = handler(null);
+
+        expect(callCount, equals(1));
+        expect(returnValues.length, equals(1));
+      });
+
+      test('should call as function with multiple void callbacks', () {
+        int callCount = 0;
+
+        void callback1(void input) {
+          callCount++;
+        }
+        void callback2(void input) {
+          callCount++;
+        }
+
+        handler.register(callback1);
+        handler.register(callback2);
+
+        final returnValues = handler(null);
+
+        expect(callCount, equals(2));
+        expect(returnValues.length, equals(2));
       });
     });
 

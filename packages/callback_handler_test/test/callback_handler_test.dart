@@ -91,40 +91,55 @@ void main() {
     });
 
     group('invoke', () {
-      test('should invoke a single callback', () {
+      test('should invoke a single callback and return Map with results', () {
         final results = <String>[];
-        handler.register((input) {
+        String callback(String input) {
           results.add('Called with: $input');
           return 'Result';
-        });
+        }
+        handler.register(callback);
 
-        handler.invoke('test');
+        final returnValues = handler.invoke('test');
+
         expect(results, equals(['Called with: test']));
+        expect(returnValues, isA<Map<int, String>>());
+        expect(returnValues.length, equals(1));
+        expect(returnValues[callback.hashCode], equals('Result'));
       });
 
-      test('should invoke multiple callbacks', () {
+      test('should invoke multiple callbacks and return Map with all results', () {
         final results = <String>[];
 
-        handler.register((input) {
+        String callback1(String input) {
           results.add('Callback1: $input');
           return 'Result1';
-        });
-        handler.register((input) {
+        }
+        String callback2(String input) {
           results.add('Callback2: $input');
           return 'Result2';
-        });
-        handler.register((input) {
+        }
+        String callback3(String input) {
           results.add('Callback3: $input');
           return 'Result3';
-        });
+        }
 
-        handler.invoke('test');
+        handler.register(callback1);
+        handler.register(callback2);
+        handler.register(callback3);
+
+        final returnValues = handler.invoke('test');
 
         // All callbacks should be invoked
         expect(results.length, equals(3));
         expect(results, contains('Callback1: test'));
         expect(results, contains('Callback2: test'));
         expect(results, contains('Callback3: test'));
+
+        // Return map should contain all results keyed by hashCode
+        expect(returnValues.length, equals(3));
+        expect(returnValues[callback1.hashCode], equals('Result1'));
+        expect(returnValues[callback2.hashCode], equals('Result2'));
+        expect(returnValues[callback3.hashCode], equals('Result3'));
       });
 
       test('should not invoke unregistered callbacks', () {
@@ -143,13 +158,17 @@ void main() {
         handler.register(callback2);
         handler.unregister(callback1);
 
-        handler.invoke('test');
+        final returnValues = handler.invoke('test');
 
         expect(results, equals(['Callback2: test']));
+        expect(returnValues.length, equals(1));
+        expect(returnValues[callback2.hashCode], equals('Result2'));
       });
 
       test('should handle invoke with no callbacks registered', () {
         expect(() => handler.invoke('test'), returnsNormally);
+        final returnValues = handler.invoke('test');
+        expect(returnValues, isEmpty);
       });
 
       test('should pass correct input to callbacks', () {
@@ -161,6 +180,33 @@ void main() {
 
         handler.invoke('test input');
         expect(receivedInput, equals('test input'));
+      });
+    });
+
+    group('call method', () {
+      test('should call as function and return Map with results', () {
+        String callback(String input) => 'Result for: $input';
+        handler.register(callback);
+
+        final returnValues = handler('test');
+
+        expect(returnValues, isA<Map<int, String>>());
+        expect(returnValues.length, equals(1));
+        expect(returnValues[callback.hashCode], equals('Result for: test'));
+      });
+
+      test('should call as function with multiple callbacks', () {
+        String callback1(String input) => 'R1: $input';
+        String callback2(String input) => 'R2: $input';
+
+        handler.register(callback1);
+        handler.register(callback2);
+
+        final returnValues = handler('input');
+
+        expect(returnValues.length, equals(2));
+        expect(returnValues[callback1.hashCode], equals('R1: input'));
+        expect(returnValues[callback2.hashCode], equals('R2: input'));
       });
     });
 

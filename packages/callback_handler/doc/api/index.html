@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="callback_handler API docs, for the Dart programming language.">
+  <title>callback_handler - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://github.com/elguala9/CallbackHandlerDart">callback_handler package</a></li>
+  </ol>
+  <div class="self-name">callback_handler</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="callback_handler">callback_handler</h1>
+<p><a href="https://pub.dev/packages/callback_handler"><img src="https://img.shields.io/pub/v/callback_handler.svg" alt="pub package"></a>
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></p>
+<p>A high-performance Dart package for managing callbacks with type-safe generics and O(1) operations.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Type-Safe</strong>: Full generic type support for inputs and return values</li>
+<li><strong>High Performance</strong>: O(1) registration and deletion using optimized FastMap</li>
+<li><strong>Multiple Callbacks</strong>: Register and invoke multiple callbacks efficiently</li>
+<li><strong>Clean Architecture</strong>: Interface-based design for easy testing and extension</li>
+<li><strong>Zero Dependencies</strong>: Lightweight with no external dependencies</li>
+</ul>
+<h2 id="installation">Installation</h2>
+<p>Add this to your package's <code>pubspec.yaml</code>:</p>
+<pre class="language-yaml"><code class="language-yaml">dependencies:
+  callback_handler: ^0.0.1
+</code></pre>
+<p>Then run:</p>
+<pre class="language-bash"><code class="language-bash">dart pub get
+</code></pre>
+<h2 id="usage">Usage</h2>
+<h3 id="basic-example">Basic Example</h3>
+<pre class="language-dart"><code class="language-dart">import 'package:callback_handler/callback_handler.dart';
+
+void main() {
+  // Create a handler with String input and String return type
+  final handler = CallbackHandler&lt;String, String&gt;();
+
+  // Register a callback
+  String myCallback(String input) {
+    print('Received: $input');
+    return 'Processed: $input';
+  }
+
+  handler.register(myCallback);
+
+  // Invoke all registered callbacks
+  handler.invoke('Hello World');
+  // Output: Received: Hello World
+
+  // Unregister when done
+  handler.unregister(myCallback);
+}
+</code></pre>
+<h3 id="multiple-callbacks">Multiple Callbacks</h3>
+<pre class="language-dart"><code class="language-dart">final handler = CallbackHandler&lt;int, int&gt;();
+
+// Register multiple callbacks
+handler.register((x) =&gt; x * 2);
+handler.register((x) =&gt; x + 10);
+handler.register((x) =&gt; x * x);
+
+// All callbacks are invoked
+handler.invoke(5);
+</code></pre>
+<h3 id="type-safety-with-generics">Type Safety with Generics</h3>
+<pre class="language-dart"><code class="language-dart">// Handler for complex types
+final dataHandler = CallbackHandler&lt;Map&lt;String, dynamic&gt;, List&lt;String&gt;&gt;();
+
+dataHandler.register((data) {
+  return [data['name'] as String, data['value'].toString()];
+});
+
+final result = dataHandler.invoke({'name': 'test', 'value': 42});
+</code></pre>
+<h3 id="event-system-example">Event System Example</h3>
+<pre class="language-dart"><code class="language-dart">class EventBus {
+  final _handlers = &lt;String, CallbackHandler&lt;dynamic, void&gt;&gt;{};
+
+  void on(String event, void Function(dynamic) callback) {
+    _handlers.putIfAbsent(
+      event,
+      () =&gt; CallbackHandler&lt;dynamic, void&gt;(),
+    ).register(callback);
+  }
+
+  void emit(String event, dynamic data) {
+    _handlers[event]?.invoke(data);
+  }
+
+  void off(String event, void Function(dynamic) callback) {
+    _handlers[event]?.unregister(callback);
+  }
+}
+
+void main() {
+  final bus = EventBus();
+
+  // Subscribe to events
+  bus.on('user:login', (user) =&gt; print('User logged in: $user'));
+  bus.on('user:login', (user) =&gt; print('Send welcome email to: $user'));
+
+  // Emit event
+  bus.emit('user:login', {'name': 'John', 'id': 123});
+}
+</code></pre>
+<h2 id="api-reference">API Reference</h2>
+<h3 id="callbackhandlerinputtype-returntype">CallbackHandler&lt;InputType, ReturnType&gt;</h3>
+<p>Main class for managing callbacks.</p>
+<h4 id="methods">Methods</h4>
+<ul>
+<li><code>void register(CallbackWithReturn&lt;InputType, ReturnType&gt; callback)</code> - Register a new callback</li>
+<li><code>void unregister(CallbackWithReturn&lt;InputType, ReturnType&gt; callback)</code> - Remove a registered callback</li>
+<li><code>void invoke(InputType input)</code> - Invoke all registered callbacks with the given input</li>
+<li><code>void clear()</code> - Remove all registered callbacks</li>
+</ul>
+<h3 id="icallbackhandlerinputtype-returntype">ICallbackHandler&lt;InputType, ReturnType&gt;</h3>
+<p>Interface defining the contract for callback handlers. Implement this for custom behavior.</p>
+<h3 id="callbackwithreturni-r">CallbackWithReturn&lt;I, R&gt;</h3>
+<p>Type definition for callbacks: <code>R Function(I)</code></p>
+<h2 id="performance">Performance</h2>
+<p>The package uses an optimized FastMap implementation that provides:</p>
+<ul>
+<li>O(1) callback registration</li>
+<li>O(1) callback deletion</li>
+<li>O(n) invocation (where n is the number of registered callbacks)</li>
+</ul>
+<p>Ideal for high-frequency event systems and real-time applications.</p>
+<h2 id="testing">Testing</h2>
+<p>The package includes comprehensive tests covering:</p>
+<ul>
+<li>Registration and unregistration</li>
+<li>Multiple callback scenarios</li>
+<li>Type safety</li>
+<li>Edge cases and error handling</li>
+</ul>
+<p>Run tests:</p>
+<pre class="language-bash"><code class="language-bash">dart test
+</code></pre>
+<h2 id="additional-information">Additional Information</h2>
+<h3 id="contributing">Contributing</h3>
+<p>Contributions are welcome! Please feel free to submit a Pull Request.</p>
+<h3 id="issues">Issues</h3>
+<p>If you encounter any issues, please file them on the <a href="https://github.com/elguala9/CallbackHandlerDart/issues">issue tracker</a>.</p>
+<h3 id="license">License</h3>
+<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="callback_handler">
+  <span class="name"><a href="callback_handler/">callback_handler</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="callback_handler">
+  <span class="name"><a href="implementations_callback_handler/">implementations\callback_handler</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="i_callback_handler">
+  <span class="name"><a href="interfaces_i_callback_handler/">interfaces\i_callback_handler</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="callback_type">
+  <span class="name"><a href="types_callback_type/">types\callback_type</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+          <dt id="FastMap">
+  <span class="name"><a href="utility_FastMap/">utility\FastMap</a></span> 
+
+</dt>
+<dd>
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="https://github.com/elguala9/CallbackHandlerDart">callback_handler package</a></li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">callback_handler</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="callback_handler/">callback_handler</a></li>
+      <li><a href="implementations_callback_handler/">implementations\callback_handler</a></li>
+      <li><a href="interfaces_i_callback_handler/">interfaces\i_callback_handler</a></li>
+      <li><a href="types_callback_type/">types\callback_type</a></li>
+      <li><a href="utility_FastMap/">utility\FastMap</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    callback_handler
+      0.0.2
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

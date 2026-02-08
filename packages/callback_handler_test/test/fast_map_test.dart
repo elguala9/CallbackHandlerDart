@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:callback_handler/utility/FastMap.dart';
+import 'package:callback_handler/utility/fast_map.dart';
 
 void main() {
   group('FastMap', () {
