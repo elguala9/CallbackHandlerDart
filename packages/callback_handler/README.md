@@ -32,7 +32,7 @@ Add this to your package's `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  callback_handler: ^0.0.2
+  callback_handler: ^0.0.3
 ```
 
 Then run:

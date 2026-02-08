@@ -1,3 +1,15 @@
+## 0.0.3
+
+* Reached 160/160 pub.dev score with complete documentation
+* Added CONTRIBUTING.md guidelines for contributors
+* Added SECURITY.md security policy
+* Added comprehensive dartdoc for all public APIs
+* Renamed FastMap.dart to fast_map.dart (follows Dart naming conventions)
+* Enhanced README with troubleshooting and migration guides
+* Added platform support documentation
+* Fixed all deprecation warnings with detailed messages
+* Added explicit platform declarations in pubspec.yaml
+
 ## 0.0.2
 
 * Added `clear()` method to remove all registered callbacks at once
