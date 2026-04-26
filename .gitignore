@@ -31,4 +31,4 @@ node_modules/
 *.tmp
 *.swp
 *~
-.serena
+.serena.vexp/
