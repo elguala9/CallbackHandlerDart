@@ -28,9 +28,15 @@ class CallbackHandler<CallbackInputType, CallbackReturnType>
     implements ICallbackHandler<CallbackInputType, CallbackReturnType> {
   /// Internal storage for registered callbacks.
   ///
-  /// Maps callback hashCodes to callback instances for O(1) lookup and removal.
+  /// Maps unique IDs to callback instances for O(1) lookup and removal.
   final FastMap<int, CallbackWithReturn<CallbackInputType, CallbackReturnType>>
       map;
+
+  /// List of keys in insertion order to support iteration
+  final List<int> _keys = [];
+
+  /// Counter for generating unique IDs for each registration
+  int _nextId = 0;
 
   /// Creates a new [CallbackHandler] instance.
   ///
@@ -43,14 +49,24 @@ class CallbackHandler<CallbackInputType, CallbackReturnType>
   @override
   void register(
       CallbackWithReturn<CallbackInputType, CallbackReturnType> callback) {
-    map.set(callback.hashCode, callback);
+    final id = _nextId++;
+    map.set(id, callback);
+    _keys.add(id);
   }
 
   /// Unregister a callback
   @override
   void unregister(
       CallbackWithReturn<CallbackInputType, CallbackReturnType> callback) {
-    map.delete(callback.hashCode);
+    // Find and remove the first occurrence of this callback
+    for (int i = 0; i < _keys.length; i++) {
+      final id = _keys[i];
+      if (map.get(id) == callback) {
+        map.delete(id);
+        _keys.removeAt(i);
+        return;
+      }
+    }
   }
 
   /// Invoke all registered callbacks with the given input (deprecated).
@@ -69,15 +85,16 @@ class CallbackHandler<CallbackInputType, CallbackReturnType>
   @override
   void clear() {
     map.clear();
+    _keys.clear();
   }
 
   /// Make the handler callable as a function
   @override
   Map<int, CallbackReturnType> call(CallbackInputType input) {
     final results = <int, CallbackReturnType>{};
-    for (int i = 0; i < map.length; i++) {
-      final callback = map.getByIndex(i);
-      results[callback.hashCode] = callback.call(input);
+    for (final id in _keys) {
+      final callback = map.get(id)!;
+      results[id] = callback.call(input);
     }
     return results;
   }
